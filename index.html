@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dasbor Proyek Interaktif - SiSen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: Saya merancang aplikasi ini sebagai dasbor proyek vertikal dengan navigasi samping. Struktur ini dipilih karena memungkinkan pengguna untuk dengan mudah melompat antar fase proyek yang berbeda (Arsitektur, Database, API, dll.) tanpa harus menggulir dokumen yang panjang. Setiap bagian dirancang untuk menjadi interaktif (misalnya, tabel database yang dapat diklik, endpoint API yang dapat diperluas) untuk mengubah informasi teknis yang padat menjadi pengalaman yang lebih menarik dan mudah dicerna. Alur pengguna dimulai dari ringkasan umum dan memungkinkan penyelaman mendalam ke setiap komponen teknis sesuai kebutuhan. -->
+    <!-- Visualization & Content Choices: 
+        - Laporan Proyek -> Tujuan: Menyajikan tumpukan teknologi -> Metode: Kartu Info dengan Ikon -> Interaksi: Tidak ada, hanya visual -> Justifikasi: Memisahkan komponen (Mobile, Web, Backend) secara visual agar mudah dipindai. -> Library/Metode: HTML/Tailwind.
+        - Skema Database -> Tujuan: Menjelaskan struktur data -> Metode: Representasi Tabel Visual -> Interaksi: Klik untuk menampilkan/menyembunyikan kode SQL -> Justifikasi: Lebih menarik daripada blok kode biasa dan memungkinkan fokus pada satu tabel pada satu waktu. -> Library/Metode: HTML/Tailwind/JS.
+        - Endpoint API -> Tujuan: Mendokumentasikan API -> Metode: Akordeon -> Interaksi: Klik untuk memperluas/menutup detail endpoint -> Justifikasi: Menghemat ruang dan mengurangi kekacauan visual, memungkinkan pengguna hanya melihat detail yang relevan. -> Library/Metode: HTML/Tailwind/JS.
+        - Desain UI Aplikasi -> Tujuan: Memvisualisasikan UI/UX yang diusulkan -> Metode: Wireframe HTML/CSS + Grafik Contoh -> Interaksi: Visual, dengan grafik interaktif (hover) -> Justifikasi: Memberikan gambaran nyata tentang produk akhir, jauh lebih efektif daripada daftar teks. Grafik contoh (Chart.js) menunjukkan kemampuan visualisasi data dasbor. -> Library/Metode: HTML/Tailwind/Chart.js.
+        - Rencana Deployment -> Tujuan: Menguraikan langkah-langkah akhir -> Metode: Daftar Periksa Visual -> Interaksi: Tidak ada, hanya visual -> Justifikasi: Format yang jelas dan ringkas untuk langkah-langkah berurutan. -> Library/Metode: HTML/Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 bg-white border-b md:border-r border-stone-200 p-4 md:p-6 sticky top-0 md:h-screen">
+            <h1 class="text-2xl font-bold text-teal-700 mb-1">SiSen</h1>
+            <p class="text-sm text-stone-500 mb-6">Dasbor Rencana Proyek</p>
+            <nav>
+                <ul class="space-y-2" id="navigation">
+                    <li><a href="#ringkasan" class="nav-link flex items-center px-4 py-2 text-stone-700 bg-teal-50 border-l-4 border-teal-600 font-semibold rounded-r-md">Ringkasan Proyek</a></li>
+                    <li><a href="#arsitektur" class="nav-link flex items-center px-4 py-2 text-stone-600 hover:bg-stone-100 rounded-md">Arsitektur & Teknologi</a></li>
+                    <li><a href="#database" class="nav-link flex items-center px-4 py-2 text-stone-600 hover:bg-stone-100 rounded-md">Struktur Database</a></li>
+                    <li><a href="#api" class="nav-link flex items-center px-4 py-2 text-stone-600 hover:bg-stone-100 rounded-md">Endpoint API</a></li>
+                    <li><a href="#webapp" class="nav-link flex items-center px-4 py-2 text-stone-600 hover:bg-stone-100 rounded-md">Aplikasi Web (Admin)</a></li>
+                    <li><a href="#mobileapp" class="nav-link flex items-center px-4 py-2 text-stone-600 hover:bg-stone-100 rounded-md">Aplikasi Mobile (Pegawai)</a></li>
+                    <li><a href="#deployment" class="nav-link flex items-center px-4 py-2 text-stone-600 hover:bg-stone-100 rounded-md">Deployment & Pengujian</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 md:p-10">
+            
+            <!-- Section: Ringkasan Proyek -->
+            <section id="ringkasan" class="content-section active">
+                <h2 class="text-3xl font-bold mb-4">Ringkasan Proyek Aplikasi Absensi "SiSen"</h2>
+                <p class="text-lg text-stone-600 mb-8">Selamat datang di dasbor interaktif untuk proyek SiSen. Dokumen ini mengubah rencana teknis menjadi panduan visual yang mudah dijelajahi. SiSen adalah sistem absensi modern yang dirancang untuk meningkatkan efisiensi dan akurasi pencatatan kehadiran pegawai melalui aplikasi mobile dan web. Aplikasi ini akan dilengkapi dengan fitur absensi berbasis foto dan GPS, manajemen laporan, serta pengajuan lembur. Gunakan navigasi di samping untuk menjelajahi setiap fase pengembangan proyek ini.</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg border border-stone-200">
+                        <h3 class="font-bold text-xl mb-2 text-teal-700">Tujuan Utama</h3>
+                        <ul class="list-disc list-inside space-y-2 text-stone-600">
+                            <li>Absensi akurat dengan validasi foto dan GPS.</li>
+                            <li>Aplikasi mobile yang intuitif untuk pegawai.</li>
+                            <li>Dasbor web komprehensif untuk manajemen.</li>
+                            <li>Laporan kehadiran yang detail dan mudah diakses.</li>
+                            <li>Sistem pengajuan lembur yang terintegrasi.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-stone-200">
+                        <h3 class="font-bold text-xl mb-2 text-teal-700">Fitur Kunci</h3>
+                         <ul class="list-disc list-inside space-y-2 text-stone-600">
+                            <li>Clock-in & Clock-out via Mobile</li>
+                            <li>Perekaman Lokasi GPS</li>
+                            <li>Verifikasi Foto Selfie</li>
+                            <li>Manajemen Laporan Absensi (Web)</li>
+                            <li>Manajemen Pengajuan Lembur (Web & Mobile)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Arsitektur & Teknologi -->
+            <section id="arsitektur" class="content-section">
+                <h2 class="text-3xl font-bold mb-4">Arsitektur & Tumpukan Teknologi</h2>
+                <p class="text-lg text-stone-600 mb-8">Bagian ini merinci fondasi teknologi yang akan digunakan untuk membangun setiap komponen aplikasi SiSen. Pemilihan teknologi ini bertujuan untuk efisiensi pengembangan, skalabilitas, dan keandalan sistem.</p>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg border border-stone-200">
+                        <h3 class="font-semibold text-xl mb-3">Aplikasi Mobile (Pegawai)</h3>
+                        <div class="space-y-2">
+                            <p><strong>Framework:</strong> React Native (Expo)</p>
+                            <p><strong>Library Kunci:</strong></p>
+                            <ul class="text-sm list-disc list-inside text-stone-600">
+                                <li>expo-camera</li>
+                                <li>expo-location</li>
+                                <li>react-native-maps</li>
+                                <li>axios</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-stone-200">
+                        <h3 class="font-semibold text-xl mb-3">Aplikasi Web (Manajemen)</h3>
+                        <div class="space-y-2">
+                            <p><strong>Framework:</strong> React.js (Vite)</p>
+                            <p><strong>Library Kunci:</strong></p>
+                             <ul class="text-sm list-disc list-inside text-stone-600">
+                                <li>Material-UI / Ant Design</li>
+                                <li>axios</li>
+                                <li>Recharts / Chart.js</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-stone-200">
+                        <h3 class="font-semibold text-xl mb-3">Backend & Infrastruktur</h3>
+                        <div class="space-y-2">
+                            <p><strong>Framework:</strong> Node.js (Express.js)</p>
+                            <p><strong>Database:</strong> PostgreSQL + PostGIS</p>
+                            <p><strong>Otentikasi:</strong> JWT</p>
+                            <p><strong>Penyimpanan File:</strong> Google Cloud Storage / S3</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Struktur Database -->
+            <section id="database" class="content-section">
+                 <h2 class="text-3xl font-bold mb-4">Struktur Database</h2>
+                 <p class="text-lg text-stone-600 mb-8">Ini adalah cetak biru data untuk aplikasi SiSen. Klik pada setiap tabel untuk melihat skema SQL detailnya. Struktur ini dirancang untuk menyimpan semua informasi secara efisien, dari data pengguna hingga catatan absensi yang terperinci.</p>
+                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4" id="db-tables">
+                    <!-- Tables will be injected by JS -->
+                 </div>
+            </section>
+
+            <!-- Section: Endpoint API -->
+            <section id="api" class="content-section">
+                <h2 class="text-3xl font-bold mb-4">Endpoint API</h2>
+                <p class="text-lg text-stone-600 mb-8">Berikut adalah daftar lengkap endpoint REST API yang berfungsi sebagai jembatan antara aplikasi frontend (web dan mobile) dengan server backend. Setiap grup endpoint menangani fungsionalitas spesifik dalam aplikasi.</p>
+                <div class="space-y-4" id="api-endpoints">
+                    <!-- API Endpoints will be injected by JS -->
+                </div>
+            </section>
+
+            <!-- Section: Web App -->
+            <section id="webapp" class="content-section">
+                <h2 class="text-3xl font-bold mb-4">Visualisasi Aplikasi Web (Manajemen)</h2>
+                <p class="text-lg text-stone-600 mb-8">Untuk memberikan gambaran yang lebih jelas, bagian ini menyajikan wireframe dari halaman-halaman utama aplikasi web admin. Ini adalah pusat kendali di mana admin dapat memantau kehadiran, mengelola data, dan menyetujui permintaan.</p>
+                
+                <div class="bg-white p-6 rounded-lg border border-stone-200">
+                    <h3 class="font-bold text-xl mb-4">Contoh Dasbor Utama</h3>
+                    <p class="text-stone-600 mb-6">Dasbor utama memberikan ringkasan visual dari aktivitas harian. Admin dapat dengan cepat melihat statistik penting dan tren kehadiran melalui grafik interaktif.</p>
+                    <div class="chart-container">
+                        <canvas id="attendanceChart"></canvas>
+                    </div>
+                    <p class="text-center text-sm text-stone-500 mt-2">Grafik Tren Kehadiran Mingguan</p>
+                </div>
+
+                 <div class="bg-white p-6 rounded-lg border border-stone-200 mt-8">
+                    <h3 class="font-bold text-xl mb-4">Contoh Halaman Laporan Absensi</h3>
+                    <p class="text-stone-600 mb-6">Halaman ini memungkinkan admin untuk memfilter dan melihat laporan absensi secara detail. Data dapat diekspor untuk keperluan lebih lanjut.</p>
+                    <div class="w-full overflow-x-auto">
+                        <table class="w-full text-sm text-left text-stone-500">
+                            <thead class="text-xs text-stone-700 uppercase bg-stone-100">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">Pegawai</th>
+                                    <th scope="col" class="px-6 py-3">Tanggal</th>
+                                    <th scope="col" class="px-6 py-3">Jam Masuk</th>
+                                    <th scope="col" class="px-6 py-3">Jam Pulang</th>
+                                    <th scope="col" class="px-6 py-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b">
+                                    <td class="px-6 py-4">Budi Santoso</td>
+                                    <td class="px-6 py-4">2025-07-31</td>
+                                    <td class="px-6 py-4">08:02</td>
+                                    <td class="px-6 py-4">17:05</td>
+                                    <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">Present</span></td>
+                                </tr>
+                                 <tr class="bg-stone-50 border-b">
+                                    <td class="px-6 py-4">Citra Lestari</td>
+                                    <td class="px-6 py-4">2025-07-31</td>
+                                    <td class="px-6 py-4">08:17</td>
+                                    <td class="px-6 py-4">17:01</td>
+                                    <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">Late</span></td>
+                                </tr>
+                                <tr class="bg-white border-b">
+                                    <td class="px-6 py-4">Adi Nugroho</td>
+                                    <td class="px-6 py-4">2025-07-31</td>
+                                    <td class="px-6 py-4">-</td>
+                                    <td class="px-6 py-4">-</td>
+                                    <td class="px-6 py-4"><span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">Absent</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Mobile App -->
+            <section id="mobileapp" class="content-section">
+                <h2 class="text-3xl font-bold mb-4">Visualisasi Aplikasi Mobile (Pegawai)</h2>
+                <p class="text-lg text-stone-600 mb-8">Aplikasi mobile dirancang dengan fokus pada kemudahan penggunaan. Berikut adalah wireframe alur utama yang akan dialami pegawai saat melakukan absensi, dari layar utama hingga konfirmasi.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Wireframe 1: Home Screen -->
+                    <div class="bg-white rounded-lg border border-stone-200 p-4 flex flex-col items-center">
+                        <div class="w-72 h-auto bg-stone-100 rounded-xl p-4 shadow-md">
+                            <p class="text-sm text-stone-500">Layar Utama</p>
+                            <p class="font-semibold mt-4">Selamat Pagi, Budi!</p>
+                            <div class="bg-white text-center p-4 rounded-lg my-4">
+                                <p class="text-stone-600">Anda belum clock-in hari ini.</p>
+                            </div>
+                            <button class="w-full bg-teal-600 text-white font-bold py-3 rounded-lg">Clock In</button>
+                        </div>
+                        <p class="text-center text-sm text-stone-500 mt-2">1. Layar Utama</p>
+                    </div>
+                    <!-- Wireframe 2: Camera View -->
+                    <div class="bg-white rounded-lg border border-stone-200 p-4 flex flex-col items-center">
+                        <div class="w-72 h-auto bg-stone-800 rounded-xl p-4 shadow-md flex flex-col justify-between">
+                             <div>
+                                <p class="text-sm text-stone-400">Ambil Foto Selfie</p>
+                                <div class="w-full h-48 bg-stone-600 my-4 rounded-lg flex items-center justify-center text-white">Kamera Depan Aktif</div>
+                             </div>
+                             <div class="w-16 h-16 rounded-full border-4 border-white bg-transparent mx-auto"></div>
+                        </div>
+                        <p class="text-center text-sm text-stone-500 mt-2">2. Ambil Foto</p>
+                    </div>
+                    <!-- Wireframe 3: Confirmation -->
+                    <div class="bg-white rounded-lg border border-stone-200 p-4 flex flex-col items-center">
+                        <div class="w-72 h-auto bg-stone-100 rounded-xl p-4 shadow-md">
+                            <p class="text-sm text-stone-500">Konfirmasi Absensi</p>
+                            <div class="w-full h-24 bg-stone-500 my-4 rounded-lg flex items-center justify-center text-white">Foto Preview</div>
+                            <div class="w-full h-20 bg-stone-400 rounded-lg flex items-center justify-center text-white">Peta Lokasi GPS</div>
+                            <button class="w-full bg-teal-600 text-white font-bold py-3 rounded-lg mt-4">Konfirmasi</button>
+                        </div>
+                        <p class="text-center text-sm text-stone-500 mt-2">3. Konfirmasi</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Deployment & Pengujian -->
+            <section id="deployment" class="content-section">
+                <h2 class="text-3xl font-bold mb-4">Rencana Deployment & Pengujian</h2>
+                <p class="text-lg text-stone-600 mb-8">Fase terakhir adalah peluncuran dan pengujian aplikasi. Proses ini memastikan bahwa semua komponen berfungsi dengan baik, aman, dan siap digunakan oleh pengguna akhir.</p>
+                <div class="bg-white p-6 rounded-lg border border-stone-200">
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <div class="w-5 h-5 bg-teal-600 text-white rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">✓</div>
+                            <div><strong class="block">Deployment Backend:</strong> Deploy API ke layanan cloud seperti Google Cloud Run atau AWS.</div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="w-5 h-5 bg-teal-600 text-white rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">✓</div>
+                            <div><strong class="block">Setup Database:</strong> Gunakan layanan database terkelola seperti AWS RDS atau Google Cloud SQL.</div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="w-5 h-5 bg-teal-600 text-white rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">✓</div>
+                            <div><strong class="block">Deployment Web App:</strong> Deploy aplikasi React ke Vercel atau Netlify untuk CI/CD yang mudah.</div>
+                        </li>
+                         <li class="flex items-start">
+                            <div class="w-5 h-5 bg-teal-600 text-white rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">✓</div>
+                            <div><strong class="block">Build Mobile App:</strong> Kompilasi file APK (Android) dan IPA (iOS) untuk distribusi.</div>
+                        </li>
+                         <li class="flex items-start">
+                            <div class="w-5 h-5 bg-teal-600 text-white rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">✓</div>
+                            <div><strong class="block">Pengujian End-to-End:</strong> Lakukan pengujian fungsionalitas inti secara menyeluruh, terutama akurasi GPS, upload foto, dan sinkronisasi waktu.</div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const contentSections = document.querySelectorAll('.content-section');
+    const dbContainer = document.getElementById('db-tables');
+    const apiContainer = document.getElementById('api-endpoints');
+
+    const dbData = [
+        { name: 'users', schema: `CREATE TABLE users (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    full_name VARCHAR(255) NOT NULL,\n    email VARCHAR(255) UNIQUE NOT NULL,\n    password_hash VARCHAR(255) NOT NULL,\n    role VARCHAR(50) NOT NULL CHECK (role IN ('employee', 'admin')),\n    department_id UUID REFERENCES departments(id),\n    position_id UUID REFERENCES positions(id),\n    created_at TIMESTAMPTZ DEFAULT now(),\n    updated_at TIMESTAMPTZ DEFAULT now()\n);` },
+        { name: 'departments', schema: `CREATE TABLE departments (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    name VARCHAR(255) NOT NULL\n);` },
+        { name: 'positions', schema: `CREATE TABLE positions (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    name VARCHAR(255) NOT NULL\n);` },
+        { name: 'attendance_records', schema: `CREATE EXTENSION IF NOT EXISTS postgis;\n\nCREATE TABLE attendance_records (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    user_id UUID NOT NULL REFERENCES users(id),\n    attendance_date DATE NOT NULL,\n    clock_in_time TIMESTAMPTZ,\n    clock_out_time TIMESTAMPTZ,\n    clock_in_location GEOGRAPHY(Point, 4326),\n    clock_out_location GEOGRAPHY(Point, 4326),\n    clock_in_photo_url TEXT,\n    clock_out_photo_url TEXT,\n    status VARCHAR(50) DEFAULT 'present',\n    created_at TIMESTAMPTZ DEFAULT now()\n);` },
+        { name: 'overtime_requests', schema: `CREATE TABLE overtime_requests (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    user_id UUID NOT NULL REFERENCES users(id),\n    request_date DATE NOT NULL,\n    start_time TIMESTAMPTZ NOT NULL,\n    end_time TIMESTAMPTZ NOT NULL,\n    reason TEXT NOT NULL,\n    status VARCHAR(50) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),\n    approved_by UUID REFERENCES users(id),\n    created_at TIMESTAMPTZ DEFAULT now()\n);` }
+    ];
+
+    dbData.forEach(table => {
+        const tableEl = document.createElement('div');
+        tableEl.className = 'bg-white p-4 rounded-lg border border-stone-200 cursor-pointer hover:border-teal-500 hover:shadow-md transition-all';
+        tableEl.innerHTML = `
+            <h4 class="font-semibold text-lg text-stone-700">${table.name}</h4>
+            <div class="schema-content hidden bg-stone-800 text-white text-sm rounded-md p-4 mt-4 overflow-x-auto">
+                <pre><code>${table.schema}</code></pre>
+            </div>
+        `;
+        dbContainer.appendChild(tableEl);
+        tableEl.addEventListener('click', () => {
+            tableEl.querySelector('.schema-content').classList.toggle('hidden');
+        });
+    });
+    
+    const apiData = [
+        {
+            group: 'Otentikasi (/auth)',
+            endpoints: [
+                { method: 'POST', path: '/auth/login', desc: 'Login untuk user (web & mobile). Mengembalikan JWT.' },
+                { method: 'GET', path: '/auth/me', desc: 'Mendapatkan data user yang sedang login berdasarkan token.' }
+            ]
+        },
+        {
+            group: 'Absensi (/attendance)',
+            endpoints: [
+                { method: 'POST', path: '/attendance/clock-in', desc: 'Menerima user_id, photo, latitude, longitude. Mengupload foto dan menyimpan data absensi masuk.' },
+                { method: 'POST', path: '/attendance/clock-out', desc: 'Sama seperti clock-in, tapi untuk memperbarui data absensi keluar.' },
+                { method: 'GET', path: '/attendance/today/:userId', desc: 'Mendapatkan status absensi hari ini untuk seorang user.' },
+                { method: 'GET', path: '/attendance/history/:userId', desc: 'Mendapatkan riwayat absensi seorang user.' },
+                { method: 'GET', path: '/attendance/report', desc: 'Mendapatkan laporan absensi dengan filter (untuk Web Admin).' }
+            ]
+        },
+        {
+            group: 'Lembur (/overtime)',
+            endpoints: [
+                { method: 'POST', path: '/overtime', desc: 'User mengajukan lembur (Mobile).' },
+                { method: 'GET', path: '/overtime/history/:userId', desc: 'Melihat riwayat pengajuan lembur user (Mobile).' },
+                { method: 'GET', path: '/overtime/requests', desc: 'Melihat semua pengajuan lembur yang pending (Web Admin).' },
+                { method: 'PUT', path: '/overtime/:requestId/approve', desc: 'Menyetujui pengajuan lembur (Web Admin).' },
+                { method: 'PUT', path: '/overtime/:requestId/reject', desc: 'Menolak pengajuan lembur (Web Admin).' }
+            ]
+        },
+        {
+            group: 'Manajemen (/management)',
+            endpoints: [
+                { method: 'CRUD', path: '/management/users', desc: 'Endpoint lengkap (GET, POST, PUT, DELETE) untuk mengelola data pegawai.' },
+                { method: 'CRUD', path: '/management/departments', desc: 'Endpoint lengkap untuk mengelola data departemen.' },
+                { method: 'CRUD', path: '/management/positions', desc: 'Endpoint lengkap untuk mengelola data jabatan.' }
+            ]
+        }
+    ];
+
+    apiData.forEach(apiGroup => {
+        const groupEl = document.createElement('div');
+        groupEl.className = 'bg-white rounded-lg border border-stone-200';
+        
+        const headerEl = document.createElement('div');
+        headerEl.className = 'p-4 cursor-pointer flex justify-between items-center';
+        headerEl.innerHTML = `<h3 class="font-semibold text-lg">${apiGroup.group}</h3> <span class="transform transition-transform">▼</span>`;
+        
+        const contentEl = document.createElement('div');
+        contentEl.className = 'hidden p-4 border-t border-stone-200';
+        
+        const listEl = document.createElement('ul');
+        listEl.className = 'space-y-3';
+        
+        apiGroup.endpoints.forEach(endpoint => {
+            const itemEl = document.createElement('li');
+            let methodClass = 'bg-blue-100 text-blue-800';
+            if(endpoint.method === 'POST') methodClass = 'bg-green-100 text-green-800';
+            if(endpoint.method === 'PUT') methodClass = 'bg-yellow-100 text-yellow-800';
+            if(endpoint.method === 'DELETE') methodClass = 'bg-red-100 text-red-800';
+            if(endpoint.method === 'CRUD') methodClass = 'bg-purple-100 text-purple-800';
+
+            itemEl.innerHTML = `
+                <div class="flex items-center gap-4">
+                    <span class="font-mono text-xs font-semibold px-2 py-1 rounded ${methodClass}">${endpoint.method}</span>
+                    <span class="font-mono text-sm text-stone-700">${endpoint.path}</span>
+                </div>
+                <p class="text-sm text-stone-600 mt-1 ml-2">${endpoint.desc}</p>
+            `;
+            listEl.appendChild(itemEl);
+        });
+
+        contentEl.appendChild(listEl);
+        groupEl.appendChild(headerEl);
+        groupEl.appendChild(contentEl);
+        apiContainer.appendChild(groupEl);
+
+        headerEl.addEventListener('click', () => {
+            contentEl.classList.toggle('hidden');
+            headerEl.querySelector('span').classList.toggle('rotate-180');
+        });
+    });
+
+
+    function switchTab(hash) {
+        contentSections.forEach(section => {
+            if ('#' + section.id === hash) {
+                section.classList.add('active');
+            } else {
+                section.classList.remove('active');
+            }
+        });
+
+        navLinks.forEach(link => {
+            if (link.getAttribute('href') === hash) {
+                link.classList.add('bg-teal-50', 'border-l-4', 'border-teal-600', 'font-semibold', 'text-stone-700');
+                link.classList.remove('text-stone-600', 'hover:bg-stone-100');
+            } else {
+                link.classList.remove('bg-teal-50', 'border-l-4', 'border-teal-600', 'font-semibold', 'text-stone-700');
+                link.classList.add('text-stone-600', 'hover:bg-stone-100');
+            }
+        });
+    }
+
+    document.getElementById('navigation').addEventListener('click', function(e) {
+        if (e.target.tagName === 'A') {
+            const hash = e.target.getAttribute('href');
+            switchTab(hash);
+        }
+    });
+
+    if (window.location.hash) {
+        switchTab(window.location.hash);
+    }
+
+    const ctx = document.getElementById('attendanceChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'],
+            datasets: [{
+                label: 'Pegawai Hadir',
+                data: [89, 92, 85, 95, 93, 50],
+                backgroundColor: 'rgba(13, 148, 136, 0.6)',
+                borderColor: 'rgba(13, 148, 136, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Jumlah Pegawai'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return ` Hadir: ${context.parsed.y} pegawai`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+
+</body>
+</html>
