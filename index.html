@@ -66,6 +66,7 @@
                     <li><a href="#webapp" class="nav-link flex items-center px-4 py-2 text-stone-600 hover:bg-stone-100 rounded-md">Aplikasi Web (Admin)</a></li>
                     <li><a href="#mobileapp" class="nav-link flex items-center px-4 py-2 text-stone-600 hover:bg-stone-100 rounded-md">Aplikasi Mobile (Pegawai)</a></li>
                     <li><a href="#payroll" class="nav-link flex items-center px-4 py-2 text-stone-600 hover:bg-stone-100 rounded-md">Kalkulasi Gaji</a></li>
+                    <li><a href="#laporan" class="nav-link flex items-center px-4 py-2 text-stone-600 hover:bg-stone-100 rounded-md">Laporan Keseluruhan</a></li>
                     <li><a href="#deployment" class="nav-link flex items-center px-4 py-2 text-stone-600 hover:bg-stone-100 rounded-md">Deployment & Pengujian</a></li>
                 </ul>
             </nav>
@@ -98,6 +99,83 @@
                             <li>Manajemen Komponen Gaji</li>
                             <li>Perhitungan & Pembuatan Slip Gaji Otomatis</li>
                         </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section: Laporan Keseluruhan -->
+            <section id="laporan" class="content-section">
+                <h2 class="text-3xl font-bold mb-4">Laporan Keseluruhan (Contoh Periode Juli 2025)</h2>
+                <p class="text-lg text-stone-600 mb-8">Bagian ini memberikan pandangan tingkat tinggi terhadap data HR perusahaan dalam satu periode. Kartu ringkasan menyoroti metrik-metrik kunci, sementara tabel di bawahnya menyajikan rekapitulasi per pegawai.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-5 rounded-lg border border-stone-200">
+                        <h4 class="text-sm font-medium text-stone-500">Total Gaji Dibayarkan</h4>
+                        <p class="text-3xl font-bold text-teal-700 mt-1">Rp 22.92 Juta</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg border border-stone-200">
+                        <h4 class="text-sm font-medium text-stone-500">Total Jam Lembur</h4>
+                        <p class="text-3xl font-bold text-teal-700 mt-1">15 Jam</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg border border-stone-200">
+                        <h4 class="text-sm font-medium text-stone-500">Tingkat Kehadiran</h4>
+                        <p class="text-3xl font-bold text-teal-700 mt-1">93.2%</p>
+                    </div>
+                     <div class="bg-white p-5 rounded-lg border border-stone-200">
+                        <h4 class="text-sm font-medium text-stone-500">Total Pegawai (Contoh)</h4>
+                        <p class="text-3xl font-bold text-teal-700 mt-1">4</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg border border-stone-200">
+                    <h3 class="font-bold text-xl mb-4">Rekapitulasi Laporan Gaji & Absensi per Pegawai</h3>
+                    <div class="w-full overflow-x-auto">
+                        <table class="w-full text-sm text-left text-stone-500">
+                            <thead class="text-xs text-stone-700 uppercase bg-stone-100">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3">Pegawai</th>
+                                    <th scope="col" class="px-4 py-3 text-center">Hadir</th>
+                                    <th scope="col" class="px-4 py-3 text-center">Lembur (Jam)</th>
+                                    <th scope="col" class="px-4 py-3 text-right">Pendapatan</th>
+                                    <th scope="col" class="px-4 py-3 text-right">Potongan</th>
+                                    <th scope="col" class="px-4 py-3 text-right">Gaji Bersih</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b">
+                                    <td class="px-4 py-4 font-medium">Budi Santoso</td>
+                                    <td class="px-4 py-4 text-center">20</td>
+                                    <td class="px-4 py-4 text-center">5</td>
+                                    <td class="px-4 py-4 text-right">Rp 6.150.000</td>
+                                    <td class="px-4 py-4 text-right text-red-600">(Rp 277.272)</td>
+                                    <td class="px-4 py-4 text-right font-semibold">Rp 5.872.728</td>
+                                </tr>
+                                 <tr class="bg-stone-50 border-b">
+                                    <td class="px-4 py-4 font-medium">Citra Lestari</td>
+                                    <td class="px-4 py-4 text-center">21</td>
+                                    <td class="px-4 py-4 text-center">8</td>
+                                    <td class="px-4 py-4 text-right">Rp 6.240.000</td>
+                                    <td class="px-4 py-4 text-right text-red-600">(Rp 0)</td>
+                                    <td class="px-4 py-4 text-right font-semibold">Rp 6.240.000</td>
+                                </tr>
+                                <tr class="bg-white border-b">
+                                    <td class="px-4 py-4 font-medium">Adi Nugroho</td>
+                                    <td class="px-4 py-4 text-center">22</td>
+                                    <td class="px-4 py-4 text-center">2</td>
+                                    <td class="px-4 py-4 text-right">Rp 5.560.000</td>
+                                    <td class="px-4 py-4 text-right text-red-600">(Rp 0)</td>
+                                    <td class="px-4 py-4 text-right font-semibold">Rp 5.560.000</td>
+                                </tr>
+                                <tr class="bg-stone-50 border-b">
+                                    <td class="px-4 py-4 font-medium">Dewi Anggraini</td>
+                                    <td class="px-4 py-4 text-center">19</td>
+                                    <td class="px-4 py-4 text-center">0</td>
+                                    <td class="px-4 py-4 text-right">Rp 5.250.000</td>
+                                    <td class="px-4 py-4 text-right text-red-600">(Rp 0)</td>
+                                    <td class="px-4 py-4 text-right font-semibold">Rp 5.250.000</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
@@ -254,13 +332,12 @@
                     </div>
                     <div class="bg-white rounded-lg border border-stone-200 p-4 flex flex-col items-center">
                         <div class="w-72 h-auto bg-stone-100 rounded-xl p-4 shadow-md">
-                            <p class="text-sm text-stone-500">Riwayat Gaji</p>
+                            <p class="text-sm text-stone-500">Riwayat Gaji (Budi Santoso)</p>
                             <p class="font-semibold mt-4">Slip Gaji - Juli 2025</p>
                              <ul class="text-sm space-y-1 mt-2">
-                                <li class="flex justify-between"><span>Gaji Pokok:</span><span>Rp 5.000.000</span></li>
-                                <li class="flex justify-between"><span>Tunjangan:</span><span>Rp 1.000.000</span></li>
-                                <li class="flex justify-between text-red-600"><span>Potongan Alfa:</span><span>(Rp 100.000)</span></li>
-                                <li class="flex justify-between font-bold border-t pt-1 mt-1"><span>Total:</span><span>Rp 5.900.000</span></li>
+                                <li class="flex justify-between"><span>Total Pendapatan:</span><span class="text-green-700">Rp 6.150.000</span></li>
+                                <li class="flex justify-between"><span>Total Potongan:</span><span class="text-red-600">(Rp 277.272)</span></li>
+                                <li class="flex justify-between font-bold border-t pt-2 mt-2"><span>Gaji Bersih:</span><span>Rp 5.872.728</span></li>
                             </ul>
                             <button class="w-full bg-gray-500 text-white font-bold py-2 rounded-lg mt-4 text-sm">Download PDF</button>
                         </div>
